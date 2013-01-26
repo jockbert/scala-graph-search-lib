@@ -1,15 +1,15 @@
-scala-search-lib
+scala-graph-search-lib
 ================
 
 Generic scala library for common graph search algorithms. 
-Aiming to to have implementations for:
+Have implementations for:
  * BFS
- * A* 
+ * A* (A-star)
 
 Other algorithms might in the future be added when needed, 
 such as:
  * bidirectional BFS
- * ID
+ * ID (Iterative deepening)
  * IDA* 
  * ...
  
