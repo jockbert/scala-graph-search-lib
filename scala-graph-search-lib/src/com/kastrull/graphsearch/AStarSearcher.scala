@@ -17,18 +17,18 @@ class AStarSearcher[S <: State[S]]
       case _ => 0
     }
 
-    val queue = PriorityQueue[MetaInformedState[S]]()(ordering)
-    queue.enqueue(
+    val fringe = PriorityQueue[MetaInformedState[S]]()(ordering)
+    fringe.enqueue(
       MetaInformedState(start, 0, estFurtherCostFunc(start)))
 
-    def enqueChildren(state: S, cost: Int) {
+    def enqueueChildren(state: S, cost: Int) {
       val children = state childStates
       val alreadyVisited = { s: S => !visited.contains(s) }
       val uniqueChildren = children filter alreadyVisited
       visited ++= uniqueChildren
 
       val metaChildren = uniqueChildren.map { s => MetaInformedState(s, cost + 1, estFurtherCostFunc(s)) }
-      queue.enqueue(metaChildren: _*)
+      fringe.enqueue(metaChildren: _*)
     }
 
     def solutionFound(state: S, cost: Int, loopCount: Int) = {
@@ -42,14 +42,14 @@ class AStarSearcher[S <: State[S]]
 
       if (loopCount % 10000 == 0) println("iter: " + loopCount)
 
-      if (queue.isEmpty) None
+      if (fringe.isEmpty) None
       else {
-        val MetaInformedState(state, cost, estFurtherCost) = queue.dequeue
+        val MetaInformedState(state, cost, estFurtherCost) = fringe.dequeue
 
         if (isTarget(state))
           solutionFound(state, cost, loopCount)
         else {
-          enqueChildren(state, cost)
+          enqueueChildren(state, cost)
           loop(loopCount + 1)
         }
       }

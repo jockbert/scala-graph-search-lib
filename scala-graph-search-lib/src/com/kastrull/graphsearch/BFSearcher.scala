@@ -9,17 +9,17 @@ final class BFSearcher[S <: State[S]] extends Searcher[S] {
   def search(start: S, isTarget: Target) = {
 
     val visited = Set[S]()
-    val queue = Queue[MetaState[S]]()
-    queue.enqueue(MetaState(start, 0))
+    val fringe = Queue[MetaState[S]]()
+    fringe.enqueue(MetaState(start, 0))
 
-    def enqueChildren(state: S, cost: Int) {
+    def enqueueChildren(state: S, cost: Int) {
       val children = state childStates
       val alreadyVisited = { s: S => !visited.contains(s) }
       val uniqueChildren = children filter alreadyVisited
       visited ++= uniqueChildren
 
       val metaChildren = uniqueChildren.map { MetaState(_, cost + 1) }
-      queue.enqueue(metaChildren: _*)
+      fringe.enqueue(metaChildren: _*)
     }
 
     def solutionFound(state: S, cost: Int, loopCount: Int) = {
@@ -33,14 +33,14 @@ final class BFSearcher[S <: State[S]] extends Searcher[S] {
 
       if (loopCount % 10000 == 0) println("iter: " + loopCount)
 
-      if (queue.isEmpty) None
+      if (fringe.isEmpty) None
       else {
-        val MetaState(state, cost) = queue.dequeue
+        val MetaState(state, cost) = fringe.dequeue
 
         if (isTarget(state))
           solutionFound(state, cost, loopCount)
         else {
-          enqueChildren(state, cost)
+          enqueueChildren(state, cost)
           loop(loopCount + 1)
         }
       }
