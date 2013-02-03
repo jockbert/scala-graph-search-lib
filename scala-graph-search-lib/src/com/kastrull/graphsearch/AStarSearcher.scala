@@ -38,10 +38,7 @@ class AStarSearcher[S <: State[S]]
     }
 
     @tailrec
-    def loop(loopCount: Int): Option[S] = {
-
-      if (loopCount % 10000 == 0) println("iter: " + loopCount)
-
+    def loop(loopCount: Int): Option[S] =
       if (fringe.isEmpty) None
       else {
         val MetaInformedState(state, cost, estFurtherCost) = fringe.dequeue
@@ -53,7 +50,6 @@ class AStarSearcher[S <: State[S]]
           loop(loopCount + 1)
         }
       }
-    }
 
     loop(1)
   }

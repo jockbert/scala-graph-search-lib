@@ -29,10 +29,7 @@ final class BFSearcher[S <: State[S]] extends Searcher[S] {
     }
 
     @tailrec
-    def loop(loopCount: Int): Option[S] = {
-
-      if (loopCount % 10000 == 0) println("iter: " + loopCount)
-
+    def loop(loopCount: Int): Option[S] =
       if (fringe.isEmpty) None
       else {
         val MetaState(state, cost) = fringe.dequeue
@@ -44,8 +41,6 @@ final class BFSearcher[S <: State[S]] extends Searcher[S] {
           loop(loopCount + 1)
         }
       }
-    }
-
     loop(1)
   }
 }
